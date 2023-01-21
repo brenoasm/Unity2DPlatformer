@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -14,6 +12,15 @@ public class PlayerMovement : MonoBehaviour
     private float dirX = 0f;
 
     private bool hasDoubleJumped = false;
+    private bool hasJumped = false;
+
+    private bool isJumping;
+    private bool isFalling = false;
+    private bool isRunning = false;
+    private bool isRunningRight = false;
+    private bool isRunningLeft = false;
+    private bool isGrounded = true;
+    private bool isIdle = true;
 
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float jumpForce = 14f;
@@ -25,7 +32,12 @@ public class PlayerMovement : MonoBehaviour
 
     private enum CharacterState
     {
-        idle = 0, running = 1, jumping = 2, falling = 3, doubleJumping = 4
+        idle = 0,
+        running = 1,
+        jumping = 2,
+        falling = 3,
+        doubleJumping = 4,
+        wallJumping = 5,
     }
 
     private void Awake()
@@ -49,43 +61,48 @@ public class PlayerMovement : MonoBehaviour
     private void HandleInputs()
     {
         dirX = Input.GetAxisRaw("Horizontal");
-        
+
         rb.velocity = new Vector2(dirX * moveSpeed, rb.velocity.y);
 
-        if (Input.GetButtonDown("Jump")
-            && (characterState == CharacterState.jumping
-            || characterState == CharacterState.falling)
-            && !hasDoubleJumped
-            )
-        {
-            hasDoubleJumped = true;
+        isGrounded = CheckGroundCollision();
 
-            jumpSoundEffect.Play();
-
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-        }
-
-        if (Input.GetButtonDown("Jump") && IsGrounded())
-        {
+        if (rb.velocity.y < 0.8f && isGrounded)
+        { 
+            hasJumped = false;
             hasDoubleJumped = false;
+        }
+
+        if (Input.GetButtonDown("Jump") && !hasDoubleJumped)
+        {
+            if (hasJumped)
+            {
+                hasDoubleJumped = true;
+            }
+            else
+            { 
+                hasJumped = true;
+            }
+
             jumpSoundEffect.Play();
 
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
         }
+
+        isFalling = rb.velocity.y < -.9f;
+        isRunning = dirX != 0f;
+        isRunningRight = dirX > 0f;
+        isRunningLeft = dirX < 0f;
+        isJumping = rb.velocity.y > .1f;
 
         UpdateAnimation();
     }
 
     private void UpdateAnimation()
     {
-        if (dirX > 0f)
+        Flip();
+
+        if (isRunning)
         {
-            spriteRenderer.flipX = false;
-            characterState = CharacterState.running;
-        }
-        else if (dirX < 0f)
-        {
-            spriteRenderer.flipX = true;
             characterState = CharacterState.running;
         }
         else
@@ -93,17 +110,18 @@ public class PlayerMovement : MonoBehaviour
             characterState = CharacterState.idle;
         }
 
-        if (rb.velocity.y > .1f)
+        if (isJumping)
         {
             if (hasDoubleJumped)
             {
                 characterState = CharacterState.doubleJumping;
-            } else
+            }
+            else
             {
                 characterState = CharacterState.jumping;
             }
         }
-        else if (rb.velocity.y < -.9f)
+        else if (isFalling)
         {
             characterState = CharacterState.falling;
         }
@@ -111,7 +129,19 @@ public class PlayerMovement : MonoBehaviour
         animator.SetInteger(CHARACTER_STATE, (int)characterState);
     }
 
-    private bool IsGrounded()
+    private void Flip()
+    {
+        if (isRunningRight)
+        {
+            spriteRenderer.flipX = false;
+        }
+        else if (isRunningLeft)
+        {
+            spriteRenderer.flipX = true;
+        }
+    }
+
+    private bool CheckGroundCollision()
     {
         return Physics2D.BoxCast(boxCollider2D.bounds.center, boxCollider2D.bounds.size,
             0f, Vector2.down, .1f, jumpableGround);
