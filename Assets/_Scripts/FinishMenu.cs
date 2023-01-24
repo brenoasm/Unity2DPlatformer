@@ -1,10 +1,11 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class FinishMenu : MonoBehaviour
 {
+    [SerializeField] private GameStateSO gameState;
+
     public void RestartGame()
     {
-        SceneManager.LoadScene(1);
+        gameState.RaiseEvent(GameState.RESTART_GAME);
     }
 }

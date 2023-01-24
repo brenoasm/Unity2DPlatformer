@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class FinishGame : MonoBehaviour
 {
+    [SerializeField] GameStateSO gameState;
+
     private AudioSource finishSoundEffect;
 
     private bool alreadyTouchedFinish = false;
@@ -26,6 +28,6 @@ public class FinishGame : MonoBehaviour
 
     private void CompleteLevel()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        gameState.RaiseEvent(GameState.COMPLETE_LEVEL);
     }
 }

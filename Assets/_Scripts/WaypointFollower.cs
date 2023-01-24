@@ -7,12 +7,12 @@ public class WaypointFollower : MonoBehaviour
 
     private int currentWaypointIndex = 0;
 
-    private GameObject currentWaypoint { get { return waypoints[currentWaypointIndex]; } }
+    private GameObject CurrentWaypoint { get { return waypoints[currentWaypointIndex]; } }
 
     private void Update()
     {
         if (Vector2.Distance(
-            currentWaypoint.transform.position,
+            CurrentWaypoint.transform.position,
             transform.position
             ) < .1f)
         {
@@ -26,7 +26,7 @@ public class WaypointFollower : MonoBehaviour
 
         transform.position = Vector2.MoveTowards(
             transform.position,
-            currentWaypoint.transform.position,
+            CurrentWaypoint.transform.position,
             Time.deltaTime * speed
             );
     }

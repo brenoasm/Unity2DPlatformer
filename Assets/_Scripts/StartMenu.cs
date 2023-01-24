@@ -1,12 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class StartMenu : MonoBehaviour
 {
+    [SerializeField] private GameStateSO gameState;
+
     public void StartGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        gameState.RaiseEvent(GameState.START_GAME);
     }
 }
