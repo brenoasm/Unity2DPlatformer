@@ -1835,7 +1835,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bcc83d1b83474a6181646ef389c1777, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collectedItems: {fileID: 11400000, guid: 6aa5f8ac949554888baab431425b8db7, type: 2}
+  collectedItems: {fileID: 11400000, guid: 47049b6f8b8ce46b79f0d89c2d626f69, type: 2}
 --- !u!114 &1237231640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99608,6 +99608,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3433768730767442578, guid: 0b08dd6f3f9ea439d83529093cc0c505, type: 3}
+      propertyPath: wallSlideSpeed
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3433768730767442578, guid: 0b08dd6f3f9ea439d83529093cc0c505, type: 3}
+      propertyPath: cancelWallJumpTime
+      value: 0.12
+      objectReference: {fileID: 0}
     - target: {fileID: 7321229190549940184, guid: 0b08dd6f3f9ea439d83529093cc0c505, type: 3}
       propertyPath: m_RootOrder
       value: 5

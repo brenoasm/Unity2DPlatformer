@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ShowCollectedItems : MonoBehaviour
 {
-    [SerializeField] CollectedItems collectedItems;
+    [SerializeField] CollectedItemsSO collectedItems;
 
     private TMP_Text textMesh;
 
