@@ -18,8 +18,29 @@ public class PlayerUI : MonoBehaviour
 
     private void Flip()
     {
-        if (playerState.moveDirX == 0f) return;
-
-        spriteRenderer.flipX = playerState.moveDirX < 0f;
+        if (playerState.isWallJumping)
+        {
+            switch (playerState.wallJumpDirection)
+            {
+                case < 0f:
+                    spriteRenderer.flipX = true;
+                    break;
+                case > 0f:
+                    spriteRenderer.flipX = false;
+                    break;
+            }
+        }
+        else
+        {
+            switch (playerState.moveDirX)
+            {
+                case < 0f:
+                    spriteRenderer.flipX = true;
+                    break;
+                case > 0f:
+                    spriteRenderer.flipX = false;
+                    break;
+            }
+        }
     }
 }

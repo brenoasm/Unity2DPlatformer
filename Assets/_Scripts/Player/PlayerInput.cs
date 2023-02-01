@@ -31,6 +31,7 @@ public class PlayerInput : MonoBehaviour
             return;
         }
 
+        playerState.wasOnTheGround = playerState.isOnTheGround;
         playerState.isOnTheGround = IsCollidingWithTerrain();
         playerState.isFacingWall = IsCollidingWithWall();
         playerState.isFalling = !playerState.isOnTheGround && rb.velocity.y < 0.1f;
